@@ -150,7 +150,7 @@ tb_event :: struct {
     y: c.uint32_t    // mouse y
 }
 
-tb_set_func             :: #type proc "c" (tb_event_struct: ^tb_event, size: ^c.size_t) -> (c.int)
+_tb_set_func :: #type proc "c" (tb_event_struct: ^tb_event, size: ^c.size_t) -> (c.int)
 
 foreign termbox2 {
     tb_init                 :: proc() -> (c.int) ---
@@ -189,4 +189,5 @@ foreign termbox2 {
     tb_has_egc              :: proc() -> (c.int) ---
     tb_attr_width           :: proc() -> (c.int) ---
     tb_version              :: proc() -> (cstring) ---
+    tb_set_func             :: proc(fn_type: c.int, callback: _tb_set_func) -> (c.int) ---
 }
