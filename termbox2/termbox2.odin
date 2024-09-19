@@ -8,13 +8,6 @@ foreign import termbox2 {
 
 TB_OPT_ATTR_W :: #config(TB_OPT_ATTR_W, 64)
 
-/* Some hard-coded caps */
-TB_HARDCAP_ENTER_MOUSE  :: "\x1b[?1000h\x1b[?1002h\x1b[?1015h\x1b[?1006h"
-TB_HARDCAP_EXIT_MOUSE   :: "\x1b[?1006l\x1b[?1015l\x1b[?1002l\x1b[?1000l"
-TB_HARDCAP_STRIKEOUT    :: "\x1b[9m"
-TB_HARDCAP_UNDERLINE_2  :: "\x1b[21m"
-TB_HARDCAP_OVERLINE     :: "\x1b[53m"
-
 /* Colors (numeric) and attributes (bitwise) (`tb_cell.fg`, `tb_cell.bg`) */
 TB_DEFAULT ::             0x0000
 TB_BLACK   ::             0x0001
@@ -25,41 +18,6 @@ TB_BLUE    ::             0x0005
 TB_MAGENTA ::             0x0006
 TB_CYAN    ::             0x0007
 TB_WHITE   ::             0x0008
-
-when TB_OPT_ATTR_W == 16 {
-    TB_BOLD      :: 0x0100
-    TB_UNDERLINE :: 0x0200
-    TB_REVERSE   :: 0x0400
-    TB_ITALIC    :: 0x0800
-    TB_BLINK     :: 0x1000
-    TB_HI_BLACK  :: 0x2000
-    TB_BRIGHT    :: 0x4000
-    TB_DIM       :: 0x8000
-    TB_256_BLACK :: TB_HI_BLACK // `TB_256_BLACK` is deprecated
-} else {
-    // `TB_OPT_ATTR_W` is 32 or 64
-    TB_BOLD                :: 0x01000000
-    TB_UNDERLINE           :: 0x02000000
-    TB_REVERSE             :: 0x04000000
-    TB_ITALIC              :: 0x08000000
-    TB_BLINK               :: 0x10000000
-    TB_HI_BLACK            :: 0x20000000
-    TB_BRIGHT              :: 0x40000000
-    TB_DIM                 :: 0x80000000
-    TB_TRUECOLOR_BOLD      :: TB_BOLD // `TB_TRUECOLOR_*` is deprecated
-    TB_TRUECOLOR_UNDERLINE :: TB_UNDERLINE
-    TB_TRUECOLOR_REVERSE   :: TB_REVERSE
-    TB_TRUECOLOR_ITALIC    :: TB_ITALIC
-    TB_TRUECOLOR_BLINK     :: TB_BLINK
-    TB_TRUECOLOR_BLACK     :: TB_HI_BLACK
-}
-
-//#if TB_OPT_ATTR_W == 64
-TB_STRIKEOUT   :: 0x0000000100000000
-TB_UNDERLINE_2 :: 0x0000000200000000
-TB_OVERLINE    :: 0x0000000400000000
-TB_INVISIBLE   :: 0x0000000800000000
-//#endif
 
 /* Event types (`tb_event.type`) */
 TB_EVENT_KEY        :: 1
@@ -84,9 +42,6 @@ TB_OUTPUT_NORMAL    :: 1
 TB_OUTPUT_256       :: 2
 TB_OUTPUT_216       :: 3
 TB_OUTPUT_GRAYSCALE :: 4
-//#if TB_OPT_ATTR_W >= :: 32
-// TB_OUTPUT_TRUECOLOR :: 5
-//#endif
 
 /* Common function return values unless otherwise noted.
  *
@@ -118,26 +73,21 @@ TB_ERR_RESIZE_READ      :: -20
 TB_ERR_RESIZE_SSCANF    :: -21
 TB_ERR_CAP_COLLISION    :: -22
 
+TB_BOLD      :: 0x0100
+TB_UNDERLINE :: 0x0200
+TB_REVERSE   :: 0x0400
+TB_ITALIC    :: 0x0800
+TB_BLINK     :: 0x1000
+TB_HI_BLACK  :: 0x2000
+TB_BRIGHT    :: 0x4000
+TB_DIM       :: 0x8000
+
 TB_ERR_SELECT           :: TB_ERR_POLL
 TB_ERR_RESIZE_SELECT    :: TB_ERR_RESIZE_POLL
 
 /* Deprecated. Function types to be used with `tb_set_func`. */
 TB_FUNC_EXTRACT_PRE     :: 0
 TB_FUNC_EXTRACT_POST    :: 1
-
-/* Define this to set the size of the buffer used in `tb_printf`
- * and `tb_sendf`
- */
-//#ifndef TB_OPT_PRINTF_BUF
-// TB_OPT_PRINTF_BUF :: 4096
-//#endif
-
-/* Define this to set the size of the read buffer used when reading
- * from the tty
- */
-//#ifndef TB_OPT_READ_BUF
-// TB_OPT_READ_BUF :: 64
-//#endif
 
 tb_event :: struct {
     type: c.uint8_t, // one of `TB_EVENT_*` constants
@@ -149,8 +99,6 @@ tb_event :: struct {
     x: c.uint32_t,    // mouse x
     y: c.uint32_t    // mouse y
 }
-
-_tb_set_func :: #type proc "c" (tb_event_struct: ^tb_event, size: ^c.size_t) -> (c.int)
 
 foreign termbox2 {
     tb_init                 :: proc() -> (c.int) ---
@@ -189,5 +137,4 @@ foreign termbox2 {
     tb_has_egc              :: proc() -> (c.int) ---
     tb_attr_width           :: proc() -> (c.int) ---
     tb_version              :: proc() -> (cstring) ---
-    tb_set_func             :: proc(fn_type: c.int, callback: _tb_set_func) -> (c.int) ---
 }
