@@ -6,7 +6,8 @@ foreign import termbox2 {
     "../termbox2.a"
 }
 
-TB_OPT_ATTR_W :: #config(TB_OPT_ATTR_W, 64)
+TB_OPT_ATTR_W :: 64
+TB_OUTPUT_TRUECOLOR :: 5
 
 /* Colors (numeric) and attributes (bitwise) (`tb_cell.fg`, `tb_cell.bg`) */
 TB_DEFAULT ::             0x0000
