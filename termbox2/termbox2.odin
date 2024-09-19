@@ -1,14 +1,13 @@
 package termbox2
 
-
 import "core:c"
 
 foreign import termbox2 {
     "./src/termbox2.a"
 }
 
-//NOTE: Most of the functionallity of Termbox2 as added as bindings.
-//      Only the function and constats marked as deprecated skipped.
+//NOTE: Most of the bindings to Termbox2 is added.
+//      Only the functions and constats marked as deprecated was skipped.
 
 //NOTE: termbox2.a is compiled with #define TB_OPT_ATTR_W 64
 //      after change in the termbox2.a should be changed here as well
