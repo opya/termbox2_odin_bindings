@@ -52,6 +52,7 @@ SOFTWARE.
 #include <unistd.h>
 #include <wchar.h>
 #include <wctype.h>
+#include <locale.h> // setlocale at tb_init
 
 #ifdef PATH_MAX
 #define TB_PATH_MAX PATH_MAX
@@ -1593,6 +1594,7 @@ int tb_init_fd(int ttyfd) {
 }
 
 int tb_init_rwfd(int rfd, int wfd) {
+    setlocale(LC_ALL, "");
     int rv;
 
     tb_reset();
