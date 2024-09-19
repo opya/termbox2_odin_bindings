@@ -1,9 +1,10 @@
 package termbox2
 
+
 import "core:c"
 
 foreign import termbox2 {
-    "../termbox2.a"
+    "./src/termbox2.a"
 }
 
 //NOTE: Most of the functionallity of Termbox2 as added as bindings.
